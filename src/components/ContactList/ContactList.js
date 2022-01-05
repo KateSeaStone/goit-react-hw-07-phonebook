@@ -1,22 +1,25 @@
 import React from "react";
+import { useEffect } from "react";
 import PropTypes from "prop-types";
 import { useSelector, useDispatch } from "react-redux";
 import ContactListItem from "../ContactListItem/ContactListItem";
 import "./ContactList.scss";
+import { getFilteredContacts } from "../../redux/Contacts/contacts-selectors";
 import {
-  getContacts,
-  getFilter,
-  getFilteredContacts,
-} from "../../redux/Contacts/contacts-selectors";
-
-import contactsActions from "../../redux/Contacts/contacts-actions";
+  deleteContact,
+  fetchContacts,
+} from "../../redux/Contacts/contacts-operations";
 
 export default function ContactList() {
   const contacts = useSelector(getFilteredContacts);
 
   const dispatch = useDispatch();
-  const onDelete = (contactId) =>
-    dispatch(contactsActions.deleteContact(contactId));
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
+
+  const onDelete = (id) => dispatch(deleteContact(id));
 
   return (
     <ul className="contactList">
